@@ -1,0 +1,34 @@
+Chiamaka Nwosu
+chiamaka.nwosu@example.com | +234 802 441 9087 | Lagos, Nigeria
+linkedin.com/in/chiamakanwosu
+
+SUMMARY
+Data analyst with six years across payments and e-commerce. I own the reporting
+the commercial team runs on, and I am usually the person their questions land with.
+
+EXPERIENCE
+
+Lead Data Analyst, Paystack-adjacent merchant platform (2023 - 2026)
+- Own the revenue, margin and merchant churn models in dbt. 40+ models, tested,
+  documented, and the single source the commercial team quotes from.
+- Rebuilt the weekly commercial dashboard in Power BI. Adoption went from 4 users
+  to 31 across commercial and partnerships within a quarter.
+- Designed and read the pricing experiment that moved merchant take rate from
+  1.4% to 1.55% on the SME tier, worth roughly 180m naira annualised.
+- Advanced SQL daily: window functions for cohort retention, incremental models
+  for the transaction table at 90m rows.
+- Mentor two junior analysts. Both now run their own stakeholder relationships.
+
+Senior Data Analyst, Jumia-scale retail marketplace (2020 - 2023)
+- Built the promotions analysis framework used to sign off every campaign.
+  Killed three campaigns pre-launch on projected margin, saving about 45m naira.
+- Ran 20+ A/B tests on checkout and search, in Python (pandas, statsmodels).
+- Cut the category reporting refresh from 6 hours to 20 minutes by moving the
+  aggregation out of the BI layer and into SQL.
+
+SKILLS
+SQL (advanced, window functions, dbt), Python (pandas, numpy, statsmodels),
+Power BI, Tableau, experiment design, Git, Airflow.
+
+EDUCATION
+BSc Statistics, University of Nigeria Nsukka, 2019. First Class.

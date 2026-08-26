@@ -1,0 +1,30 @@
+Bisi Lawal
+bisi.lawal@example.com | +234 805 220 9913 | Lagos
+
+SUMMARY
+Chartered accountant moving into data analytics. One year in an analyst role,
+seven years in finance before that.
+
+EXPERIENCE
+
+Data Analyst, Financial services firm (2025 - 2026)
+- Build the monthly management reporting pack. Moved it from Excel into Power BI.
+- Write SQL to pull from the general ledger and the customer system.
+- Started using Python (pandas) for the reconciliation checks this year.
+
+Financial Accountant, Same firm (2019 - 2025)
+- Owned the monthly close and the statutory reporting.
+- Built the budgeting model the commercial team used for planning.
+- Deep familiarity with how revenue and margin actually get booked, which is
+  where most of the reporting errors I now catch come from.
+
+SKILLS
+SQL (intermediate), Power BI, Python (pandas, learning), Excel (expert), IFRS.
+
+CERTIFICATIONS
+ICAN chartered accountant, 2022.
+Google Data Analytics Professional Certificate, 2025.
+DataCamp Data Analyst in Python track, 2025.
+
+EDUCATION
+BSc Accounting, Lagos State University, 2018.

@@ -1,0 +1,41 @@
+=== Full batch screen, 10 CVs ===
+
+
+Rubric weights total 100. Screening 10 CVs with claude-sonnet-5.
+
+RANK  SCORE  BAND             CANDIDATE          MATH  GAPS
+   1     98  Strong match     Chiamaka Nwosu      ok   0
+   2     93  Strong match     Ibrahim Sani        ok   1
+   3     91  Strong match     Ada Obieze          ok   2
+   4     73  Possible match   Fatima Bello        ok   4
+   5     43  Weak match       Tunde Bakare        ok   4
+   6     40  Weak match       Kelechi Eze         ok   4
+   7     36  Not a match      Zainab Yusuf        ok   4
+   8     33  Not a match      Bisi Lawal          ok   4
+   9     19  Not a match      Emeka Okafor        ok   4
+  10     18  Not a match      Segun Adeyemi       ok   4
+
+10/10 screened in 13.2s
+Every score recomputes from its ratings.
+
+=== Consistency, 3 runs of the same 10 CVs ===
+run 1... done
+run 2... done
+run 3... done
+
+claude-sonnet-5, 3 runs of the same 10 CVs
+
+CANDIDATE          SCORES        SPREAD  BAND STABLE
+Chiamaka Nwosu      98  98  98       0  yes
+Ada Obieze          91  96  91       5  yes
+Ibrahim Sani        93  93  88       5  yes
+Fatima Bello        73  73  73       0  yes
+Tunde Bakare        43  46  46       3  yes
+Bisi Lawal          42  37  42       5  NO (Weak match / Not a match)
+Kelechi Eze         38  38  38       0  yes
+Zainab Yusuf        40  40  34       6  NO (Weak match / Not a match)
+Emeka Okafor        19  19  23       4  yes
+Segun Adeyemi       18  20  18       2  yes
+
+Widest spread on any one CV: 6 points.
+Candidates whose band changed between runs: 2 of 10.

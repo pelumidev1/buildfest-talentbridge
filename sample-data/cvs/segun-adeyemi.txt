@@ -1,0 +1,25 @@
+Segun Adeyemi
+segun.adeyemi@example.com | 0701 556 3390 | Lagos
+
+SUMMARY
+Reporting analyst with two years of experience. Looking to move into a full
+data analyst role.
+
+EXPERIENCE
+
+Reporting Analyst, Distribution company (2024 - 2026)
+- Produce the daily and weekly sales reports in Excel for the sales managers.
+- Maintain the pivot table workbooks that the regional teams use.
+- Pull data from the ERP using the built-in export, then process in Excel.
+- Currently learning SQL through an online course.
+
+Sales Support Officer, Same company (2024)
+- Handled order entry and customer queries.
+- Prepared the weekly sales summary.
+
+SKILLS
+Excel (advanced, pivot tables, Power Query, VLOOKUP), PowerPoint, SQL (learning),
+basic Power BI.
+
+EDUCATION
+BSc Business Administration, Covenant University, 2023.

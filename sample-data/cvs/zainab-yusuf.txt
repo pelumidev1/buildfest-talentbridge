@@ -1,0 +1,30 @@
+Zainab Yusuf
+zainab.y@example.com | 0812 776 4409 | Kano
+Age: 29
+Religion: Islam
+
+SUMMARY
+Business intelligence analyst. Four years, Power BI specialist.
+
+EXPERIENCE
+
+BI Analyst, Manufacturing group (2022 - 2026)
+- Built and maintain 18 Power BI dashboards across production, sales and HR.
+- Manage the Power BI workspace, row-level security and the refresh schedules.
+- Write SQL to pull from the ERP into the reporting layer. Mostly joins and
+  aggregations; I have not needed window functions.
+- Train new users on the dashboards. Run a monthly BI clinic.
+- Handle the reporting requests from the commercial director's office.
+
+BI Reporting Officer, Same group (2022)
+- Produced the daily production report.
+- Migrated legacy Excel reports into Power BI.
+
+SKILLS
+Power BI (expert), DAX, SQL (intermediate), Excel (advanced), SSRS.
+
+NOTES
+I have not used Python. I have not run A/B tests.
+
+EDUCATION
+BSc Business Administration, Bayero University Kano, 2021.

@@ -1,0 +1,48 @@
+=== npm run test:redact ===
+
+
+Candidate A
+[email removed] | [phone removed] | Lagos, Nigeria
+[date of birth removed]
+[gender removed]
+[marital status removed]
+[profile removed]
+
+EXPERIENCE
+Senior Data Analyst, PayGrid (2023-2026)
+Data Analyst, Kobo Retail (2022-2023)
+Cut close from 9 days to 2. Managed 40 stores. Budget of 1,200,000 naira.
+Contact Candidate A for references. Reach Candidate A on [phone removed].
+
+--- REDACTIONS ---
+date of birth x1, gender x1, marital status x1, email x1, linkedin x1, phone x2, candidate name x3
+
+--- CHECKS ---
+PASS  date range 2023-2026 survives
+PASS  date range 2022-2023 survives
+PASS  real phone redacted
+PASS  intl phone redacted
+PASS  email redacted
+PASS  name gone everywhere
+PASS  dob line gone
+PASS  gender line gone
+PASS  linkedin gone
+PASS  impact numbers survive
+PASS  filename parsing
+PASS  alias sequence
+
+=== npm run test:extract ===
+
+
+PASS  ada-obieze-CV.pdf          name="Ada Obieze" chars= 1145 redacted=5
+PASS  bisi-lawal-CV.pdf          name="Bisi Lawal" chars= 1062 redacted=3
+PASS  chiamaka-nwosu-CV.pdf      name="Chiamaka Nwosu" chars= 1624 redacted=4
+PASS  emeka-okafor-CV.pdf        name="Emeka Okafor" chars=  908 redacted=4
+PASS  fatima-bello-CV.pdf        name="Fatima Bello" chars= 1124 redacted=5
+PASS  ibrahim-sani-CV.pdf        name="Ibrahim Sani" chars= 1164 redacted=3
+PASS  kelechi-eze-CV.pdf         name="Kelechi Eze" chars=  993 redacted=4
+PASS  segun-adeyemi-CV.pdf       name="Segun Adeyemi" chars=  796 redacted=3
+PASS  tunde-bakare-CV.pdf        name="Tunde Bakare" chars= 1074 redacted=3
+PASS  zainab-yusuf-CV.pdf        name="Zainab Yusuf" chars=  951 redacted=5
+
+All PDFs extract and de-identify cleanly.

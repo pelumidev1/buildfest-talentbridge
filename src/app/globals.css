@@ -1,26 +1,65 @@
 @import "tailwindcss";
 
+/* A recruiter tool, not a landing page. Dark, dense, and quiet, so the only
+   thing with colour on the screen is the thing being judged: the score. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0d10;
+  --surface: #12151a;
+  --surface-2: #171b21;
+  --border: #232830;
+  --border-strong: #333a45;
+  --foreground: #e8eaed;
+  --muted: #9aa3ae;
+  --muted-2: #6b7480;
+
+  --accent: #7dd3a0;
+  --accent-dim: #1f3a2b;
+
+  --strong: #7dd3a0;
+  --possible: #e3c04a;
+  --weak: #d98b52;
+  --nomatch: #8e959e;
+  --danger: #e0736b;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-accent: var(--accent);
+  --color-accent-dim: var(--accent-dim);
+  --color-danger: var(--danger);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tabular figures everywhere a number is compared to another number. */
+.nums {
+  font-variant-numeric: tabular-nums;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+::selection {
+  background: var(--accent-dim);
 }

@@ -1,0 +1,28 @@
+Ibrahim Sani
+i.sani@example.com | 0806 223 7741 | Abuja, Nigeria
+
+PROFILE
+Five years in analytics, most recently in payments. Comfortable owning a
+question from "why is margin down" through to the recommendation.
+
+EXPERIENCE
+
+Data Analyst, Interswitch-scale payments processor (2022 - 2026)
+- Own the transaction and settlement reporting. SQL models feeding a Tableau
+  workbook the commercial and risk teams both run on.
+- Designed the experiment framework for pricing changes. Ran 14 tests over
+  two years; three shipped, and the largest added 0.08% to blended take rate.
+- Python (pandas) for cohort and lifetime value analysis. Built the merchant
+  LTV model the partnerships team uses to size deals.
+- Reduced the settlement reconciliation report from a 3-hour manual process to
+  a scheduled 12-minute job.
+
+Analyst, Retail chain, category team (2021 - 2022)
+- Weekly category performance reporting in Tableau for the buying team.
+- SQL against the POS warehouse, including window functions for basket analysis.
+
+SKILLS
+SQL (advanced), Python (pandas, scipy), Tableau, experiment design, dbt (basic).
+
+EDUCATION
+BEng Electrical Engineering, Ahmadu Bello University, 2020.

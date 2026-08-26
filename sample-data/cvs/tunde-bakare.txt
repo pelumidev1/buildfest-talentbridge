@@ -1,0 +1,29 @@
+Tunde Bakare
+tunde.bakare@example.com | 0703 448 1120 | Ibadan
+
+SUMMARY
+Analytics engineer, four years. Strongest on the modelling layer.
+
+EXPERIENCE
+
+Analytics Engineer, Logistics startup (2023 - 2026)
+- Own the dbt project. 60+ models covering deliveries, driver performance and
+  unit economics. Test coverage at 80%.
+- Advanced SQL: incremental models, window functions, and the performance work
+  that took the main fact table from a 40-minute to a 6-minute build.
+- Python (pandas) for data quality checks and the weekly anomaly report.
+- Built the data platform the analysts and the product team query.
+
+Data Analyst, Same company (2022 - 2023)
+- Operational reporting for the fleet team. Metabase dashboards.
+- Analysis on route efficiency that supported a change saving about 12% on fuel.
+
+SKILLS
+SQL (advanced), dbt, Python (pandas), Airflow, Metabase, Snowflake, Git.
+
+NOTES
+Most of my dashboard work has been for operations and engineering audiences
+rather than commercial teams. I have not run formal A/B tests.
+
+EDUCATION
+BSc Computer Science, University of Ibadan, 2021.

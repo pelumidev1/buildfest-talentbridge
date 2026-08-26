@@ -1,0 +1,30 @@
+Ada Obieze
+ada.obieze@example.com | +234 803 555 0142 | Lagos, Nigeria
+Date of Birth: 12 March 1996
+Gender: Female
+
+SUMMARY
+Data analyst, four years building commercial reporting in retail and fintech.
+
+EXPERIENCE
+
+Senior Data Analyst, PayGrid (2023 - 2026)
+- Rebuilt the merchant reporting suite in Power BI. Month-end close went from
+  9 days to 2, and the commercial leads stopped asking engineering for numbers.
+- Wrote and own the SQL models behind the churn dashboard, used weekly by the
+  commercial team. Window functions for rolling retention and cohort views.
+- Ran the pricing A/B test on the mid-tier plan. Read the result, recommended
+  against rollout, and the recommendation held.
+- Python (pandas) for the monthly margin analysis and any ad-hoc digging.
+
+Data Analyst, Kobo Retail (2022 - 2023)
+- Daily sales reporting in Python (pandas) across 40 stores.
+- Built the store performance dashboard in Power BI that regional managers
+  still use.
+- Took over the stock-out report and cut its runtime from 40 minutes to 4.
+
+SKILLS
+SQL (advanced), Python (pandas), Power BI, A/B testing, Excel.
+
+EDUCATION
+BSc Statistics, University of Lagos, 2021.

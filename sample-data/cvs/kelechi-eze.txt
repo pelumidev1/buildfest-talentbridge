@@ -1,0 +1,30 @@
+Kelechi Eze
+kelechi.eze@example.com | +234 809 332 6018 | Port Harcourt
+Nationality: Nigerian
+
+SUMMARY
+Data analyst with three years of experience in reporting and business intelligence.
+
+EXPERIENCE
+
+Data Analyst, Insurance company (2023 - 2026)
+- Responsible for producing weekly and monthly management reports.
+- Responsible for maintaining dashboards in Power BI for the sales division.
+- Responsible for writing SQL queries to extract data from the core system.
+- Used Python (pandas) for data cleaning tasks.
+- Participated in the quarterly business review preparation.
+- Supported the commercial team with ad-hoc data requests.
+
+Junior Data Analyst, Same company (2023)
+- Assisted with report preparation.
+- Performed data entry validation and quality checks.
+- Learned SQL and Power BI on the job.
+
+SKILLS
+SQL, Power BI, Python (pandas), Excel, PowerPoint.
+
+EDUCATION
+BSc Mathematics, University of Port Harcourt, 2022.
+
+CERTIFICATIONS
+Microsoft Power BI Data Analyst Associate (PL-300), 2024.

@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TalentBridge Screening Assistant
 
-## Getting Started
+A first-pass CV screen for recruiters. You give it a job description and a stack
+of CVs. It reads each one, strips the candidate's identity, scores the CV against
+a fixed rubric, shows the evidence behind every rating, and hands you a ranked
+list. You decide who gets interviewed.
 
-First, run the development server:
+Built for AI BuildFest 2026, Track 1, Case Study 3.
+
+## Run it
+
+```bash
+npm install
+```
+
+Copy `.env.example` to `.env.local` and add your Anthropic API key:
+
+```bash
+cp .env.example .env.local
+```
+
+Then start it:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 and click "Load the sample role and 10 CVs" to see it
+work without uploading anything.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## What it does, in order
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Reads the CV.** PDF text extraction with `unpdf`. Plain text files work too.
+   A scanned, image-only PDF is flagged rather than scored, because a CV the
+   system could not read must not look like a weak candidate.
+2. **Removes the identity.** Name, email, phone, address, date of birth, age,
+   gender, marital status, nationality, religion and profile links are stripped
+   before the text goes anywhere near the model. The model sees "Candidate C".
+3. **Rates five criteria.** One call per CV. The model rates each criterion 0 to
+   5 and must quote the words from the CV that justify the rating.
+4. **Calculates the score in code.** The model never returns a total. Points for
+   a criterion are `rating / 5 × weight`, summed. Same ratings, same score, every
+   time, and a recruiter can recompute any number by hand.
+5. **Ranks and explains.** Every candidate keeps their row, their score, their
+   evidence and their gaps. Nobody is filtered out.
+6. **Waits for you.** The shortlist is a tick box. The system never ticks it.
 
-## Learn More
+## The rubric
 
-To learn more about Next.js, take a look at the following resources:
+| Criterion | Weight | What it measures |
+|---|---|---|
+| Core skills match | 30 | Coverage of the must-have skills in the job description |
+| Relevant experience | 25 | Closeness of the work history to this role's scope and domain |
+| Tools and technologies | 15 | Hands-on use of the specific tools named in the job description |
+| Education and certifications | 10 | Only what the job description actually requires |
+| Evidence of impact | 20 | Measurable outcomes rather than a list of duties |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Bands: 80+ strong match, 60+ possible match, 40+ weak match, below 40 not a match.
+A band is a recommended action, not a decision.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The weights are set in `src/lib/rubric.ts` before any CV is seen and do not change
+per candidate. Edit that file to re-weight the screen for a different role.
 
-## Deploy on Vercel
+## Project layout
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/lib/rubric.ts     the criteria, weights, bands, and the scoring arithmetic
+src/lib/redact.ts     identity stripping, and the receipt of what was removed
+src/lib/extract.ts    PDF and plain-text extraction
+src/lib/screen.ts     the Claude call: prompt, schema, and result normalising
+src/app/api/screen/   the batch route, concurrency pool, and error isolation
+src/components/       the result card and shared UI
+sample-data/          the sample job description and 10 CVs as plain text
+public/samples/       the same 10 CVs as PDFs, for the demo loader
+scripts/              tests and the sample PDF generator
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tests
+
+```bash
+npm run test:redact
+```
+
+Checks that identity is removed and that employment date ranges, impact numbers
+and business figures survive the redaction pass.
+
+```bash
+npm run test:extract
+```
+
+Runs all 10 sample PDFs through extraction and redaction and checks that no
+contact detail or name survives into what the model would read.
+
+```bash
+npm run test:screen
+```
+
+Screens all 10 sample CVs against the sample role and prints the ranked result.
+This one calls the API and costs money.
+
+## Model
+
+Defaults to Claude Sonnet 5. Set `SCREENER_MODEL=claude-opus-5` in `.env.local`
+for a sharper read when it matters more than the bill.
+
+## What this does not do
+
+- It does not decide who is hired, and it does not reject anyone.
+- It does not read scanned CVs. Those need OCR first and are flagged.
+- It does not check references, verify claims, or detect a CV that is lying.
+- It removes the obvious identity signals. It cannot remove every possible one,
+  and a school name or a city can still carry information. Blind screening
+  reduces bias. It does not end it.

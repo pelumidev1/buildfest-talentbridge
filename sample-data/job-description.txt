@@ -1,0 +1,35 @@
+Data Analyst, Commercial
+TalentBridge Consulting, on behalf of a retail and payments client
+Lagos, hybrid
+
+About the role
+The commercial team makes pricing, promotion and merchant decisions weekly and
+currently waits on the engineering backlog for every number. We are hiring a
+Data Analyst who will own that reporting end to end and become the person the
+commercial leads bring questions to.
+
+What you will do
+- Build and maintain dashboards the commercial team uses to run the week
+- Write and own the SQL models behind revenue, margin and churn reporting
+- Design and read experiments on pricing and promotions
+- Turn open questions from commercial leads into analysis with a recommendation
+
+Requirements
+- At least 3 years working as a data analyst or in a closely related analytics role
+- Advanced SQL, including window functions and building reusable models
+- Python for analysis, specifically pandas
+- Power BI or Tableau, with dashboards you built yourself in production use
+- Experience building reporting for commercial, sales or marketing stakeholders
+  rather than for engineers
+- Experience designing or analysing A/B tests or other controlled experiments
+- A degree in a numerate discipline such as statistics, mathematics, economics,
+  engineering or computer science
+
+Nice to have
+- dbt or a similar transformation framework
+- Retail, e-commerce or payments domain experience
+- Experience mentoring junior analysts
+
+What we are not looking for
+- Dashboard maintenance only, with no analysis
+- Reporting built solely in spreadsheets

@@ -1,0 +1,26 @@
+Emeka Okafor
+emeka.okafor@example.com | +234 810 447 2256 | Lagos
+github.com/emekaokafor
+
+SUMMARY
+Backend software engineer, five years. Python and Go.
+
+EXPERIENCE
+
+Senior Backend Engineer, Fintech startup (2023 - 2026)
+- Build and run the payments API. Go and PostgreSQL, about 2m requests a day.
+- Wrote the ledger service and its reconciliation jobs.
+- Own the database schema. Heavy SQL, including query optimisation and window
+  functions in the reporting endpoints I built for the internal admin tool.
+- Python for tooling, scripts and the data migration work.
+
+Backend Engineer, Software consultancy (2021 - 2023)
+- Built REST APIs for client projects in Python (Django) and Node.
+- Some data pipeline work moving client data into PostgreSQL.
+
+SKILLS
+Go, Python (Django, pandas for scripts), PostgreSQL, SQL (advanced), Docker,
+Kubernetes, AWS, Git.
+
+EDUCATION
+BSc Computer Science, University of Benin, 2020.

@@ -1,0 +1,30 @@
+Fatima Bello
+fatima.bello@example.com | +234 807 918 2245
+Address: 14 Adeola Odeku Street, Victoria Island, Lagos
+Marital Status: Single
+
+SUMMARY
+Marketing analyst turned data analyst. Four years, mostly on campaign and
+customer analytics for consumer brands.
+
+EXPERIENCE
+
+Data Analyst, Marketing, Consumer goods distributor (2023 - 2026)
+- Built the campaign performance dashboard in Tableau. Used by the marketing
+  director and the four regional commercial managers every Monday.
+- SQL against the CRM and sales warehouse, including window functions for
+  customer recency and frequency segmentation.
+- Ran A/B tests on email and SMS campaigns. Lifted promotional conversion from
+  2.1% to 3.4% over eight months of iteration.
+- Python (pandas) for the customer segmentation refresh each quarter.
+
+Marketing Analyst, Advertising agency (2022 - 2023)
+- Media spend reporting across six client accounts.
+- Built the first version of the agency's attribution model in Excel, later
+  rebuilt it in SQL.
+
+SKILLS
+SQL, Tableau, Python (pandas), A/B testing, Google Analytics, Excel.
+
+EDUCATION
+BSc Economics, Obafemi Awolowo University, 2021.
