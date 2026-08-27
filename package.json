@@ -10,6 +10,8 @@
     "test:redact": "tsx scripts/redact-test.ts",
     "test:extract": "tsx scripts/extract-test.ts",
     "test:screen": "tsx --env-file=.env.local scripts/screen-test.ts",
+    "test:consistency": "tsx --env-file=.env.local scripts/consistency-test.ts",
+    "test:smoke": "tsx --env-file=.env.local scripts/smoke.ts",
     "samples": "tsx scripts/make-pdfs.ts"
   },
   "dependencies": {

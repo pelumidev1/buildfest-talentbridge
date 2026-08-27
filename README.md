@@ -7,7 +7,16 @@ list. You decide who gets interviewed.
 
 Built for AI BuildFest 2026, Track 1, Case Study 3.
 
-## Run it
+## Try it
+
+**https://buildfest-talentbridge.vercel.app** — access code `talentbridge-1fc26f39`
+
+The code is a shared passphrase, not an auth system. It is there because every
+screening run spends real Anthropic credit, and the door should not stand open
+on the public internet. Once you are in, click "Load the sample role and 10 CVs"
+and screen them.
+
+## Run it locally
 
 ```bash
 npm install
@@ -97,6 +106,15 @@ npm run test:screen
 
 Screens all 10 sample CVs against the sample role and prints the ranked result.
 This one calls the API and costs money.
+
+```bash
+npm run test:consistency
+```
+
+Screens the same 10 CVs three times and reports how far any single score moved
+and whether any candidate changed band. This is the test that says how much
+weight a single number can carry. It calls the API three times over and is the
+most expensive of the four.
 
 ## Model
 

@@ -6,6 +6,14 @@ TalentBridge Screening Assistant. A first-pass CV screen that scores candidates
 against a published rubric, shows the evidence behind every number, and leaves
 the decision with the recruiter.
 
+**Live:** https://buildfest-talentbridge.vercel.app
+**Access code:** `talentbridge-1fc26f39`
+**Source:** https://github.com/pelumidev1/buildfest-talentbridge
+
+The access code is a shared passphrase rather than an auth system. Screening
+spends real API credit per run, so the demo is gated. Click "Load the sample
+role and 10 CVs" to reproduce section 6 without uploading anything.
+
 ---
 
 ## 1. The business problem
