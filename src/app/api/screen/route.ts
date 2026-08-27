@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { extractCvText } from "@/lib/extract";
 import { redact, aliasFor, nameFromFilename } from "@/lib/redact";
-import { screenCandidate, MODEL } from "@/lib/screen";
+import { screenCandidate, describeApiError, MODEL } from "@/lib/screen";
 import { isUnlocked } from "@/lib/gate";
 import { rateLimited, RATE_LIMIT_MESSAGE } from "@/lib/rate-limit";
 import type { Candidate, ScreenResult } from "@/lib/types";
@@ -109,7 +109,9 @@ export async function POST(request: Request) {
       return { ...base, ...outcome, redactions, extractedChars: rawText.length };
     } catch (error) {
       // One bad CV must not lose the other nine. The row still appears, marked.
-      const message = error instanceof Error ? error.message : "Unknown error";
+      // describeApiError, not error.message: the raw SDK text reports an empty
+      // credit balance and a broken TLS session both as "Connection error."
+      const message = describeApiError(error);
       return { ...base, redactions, extractedChars: rawText.length, error: `Screening failed: ${message}` };
     }
   });
