@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 
 import { extractCvText } from "@/lib/extract";
 import { redact, aliasFor, nameFromFilename } from "@/lib/redact";
-import { screenCandidate, MODEL } from "@/lib/screen";
-import { isUnlocked } from "@/lib/gate";
+import { screenCandidate, describeApiError, MODEL } from "@/lib/screen";
+import { isUnlocked, gateIsMisconfigured } from "@/lib/gate";
 import { rateLimited, RATE_LIMIT_MESSAGE } from "@/lib/rate-limit";
 import type { Candidate, ScreenResult } from "@/lib/types";
 
@@ -34,6 +34,12 @@ async function pool<T, R>(items: T[], limit: number, fn: (item: T, i: number) =>
 }
 
 export async function POST(request: Request) {
+  if (gateIsMisconfigured()) {
+    return NextResponse.json(
+      { error: "SCREENER_ACCESS_CODE is not set on the server, so the gate cannot open." },
+      { status: 503 }
+    );
+  }
   if (!(await isUnlocked())) {
     return NextResponse.json({ error: "Enter the access code to run a screen." }, { status: 401 });
   }
@@ -109,7 +115,9 @@ export async function POST(request: Request) {
       return { ...base, ...outcome, redactions, extractedChars: rawText.length };
     } catch (error) {
       // One bad CV must not lose the other nine. The row still appears, marked.
-      const message = error instanceof Error ? error.message : "Unknown error";
+      // describeApiError, not error.message: the raw SDK text reports an empty
+      // credit balance and a broken TLS session both as "Connection error."
+      const message = describeApiError(error);
       return { ...base, redactions, extractedChars: rawText.length, error: `Screening failed: ${message}` };
     }
   });

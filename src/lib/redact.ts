@@ -35,9 +35,15 @@ function isPhone(match: string): boolean {
   return (match.match(/\d/g) || []).length >= MIN_PHONE_DIGITS;
 }
 
+// The profile patterns swallow the scheme and the www themselves. Matching the
+// bare host and leaving "https://www." behind means the URL pass that follows
+// finds that stub and replaces it too, so a real CV line turns into
+// "[link removed] removed]" and the redaction summary counts the same link
+// twice. A CV that writes the host bare still matches; both halves are optional.
+const PROFILE_PREFIX = String.raw`(?:https?:\/\/)?(?:www\.)?`;
 const URL = /\b(?:https?:\/\/|www\.)\S+/gi;
-const LINKEDIN = /\blinkedin\.com\/[\w\/-]+/gi;
-const GITHUB = /\bgithub\.com\/[\w\/-]+/gi;
+const LINKEDIN = new RegExp(String.raw`\b${PROFILE_PREFIX}linkedin\.com\/[\w\/-]+`, "gi");
+const GITHUB = new RegExp(String.raw`\b${PROFILE_PREFIX}github\.com\/[\w\/-]+`, "gi");
 
 // Labelled lines. These are the fields that show up on CVs in this region and
 // are exactly the ones a screen must not weigh.

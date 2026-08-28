@@ -1,46 +1,52 @@
 @import "tailwindcss";
 
-/* A recruiter tool, not a landing page. Dark, dense, and quiet, so the only
-   thing with colour on the screen is the thing being judged: the score. */
+/* Pressroom. White sheets on a grey desk, hairline rules, lowercase working
+   titles, numbers in the margin. Colour appears in exactly one place: the band
+   a candidate lands in. Everything else is ink on paper. */
 :root {
-  --background: #0b0d10;
-  --surface: #12151a;
-  --surface-2: #171b21;
-  --border: #232830;
-  --border-strong: #333a45;
-  --foreground: #e8eaed;
-  --muted: #9aa3ae;
-  --muted-2: #6b7480;
+  --desk: #e6e5e2;
+  --sheet: #ffffff;
+  --sheet-inset: #faf9f7;
+  --rule: #e0ded9;
+  --rule-strong: #c9c6c0;
 
-  --accent: #7dd3a0;
-  --accent-dim: #1f3a2b;
+  --ink: #1a1a18;
+  --ink-2: #5c5a55;
+  --ink-3: #8a8781;
 
-  --strong: #7dd3a0;
-  --possible: #e3c04a;
-  --weak: #d98b52;
-  --nomatch: #8e959e;
-  --danger: #e0736b;
+  /* The band ramp, darkened from the dark-mode values to hold contrast on
+     white. Same semantics: in range, caution, warning, inert. */
+  --strong: #1e7a4e;
+  --possible: #9a7409;
+  --weak: #b0551d;
+  --none: #6e6b64;
+  --fault: #a93226;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-surface-2: var(--surface-2);
-  --color-border: var(--border);
-  --color-border-strong: var(--border-strong);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-muted-2: var(--muted-2);
-  --color-accent: var(--accent);
-  --color-accent-dim: var(--accent-dim);
-  --color-danger: var(--danger);
+  --color-desk: var(--desk);
+  --color-sheet: var(--sheet);
+  --color-sheet-inset: var(--sheet-inset);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-strong: var(--strong);
+  --color-possible: var(--possible);
+  --color-weak: var(--weak);
+  --color-none: var(--none);
+  --color-fault: var(--fault);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--desk);
+  color: var(--ink);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -48,6 +54,14 @@ body {
 /* Tabular figures everywhere a number is compared to another number. */
 .nums {
   font-variant-numeric: tabular-nums;
+}
+
+/* A sheet on the desk. */
+.sheet {
+  border-radius: 3px;
+  border: 1px solid var(--rule);
+  background: var(--sheet);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 input,
@@ -61,5 +75,281 @@ textarea {
 }
 
 ::selection {
-  background: var(--accent-dim);
+  background: color-mix(in srgb, var(--strong) 18%, transparent);
+}
+
+/* The frame ThreeUI's own preview page puts around a component. It is not part
+   of the registered source bundle, which defines no .shader-frame rule, so the
+   stage inside it would otherwise resolve height: 100% against nothing and fall
+   back to its own 240px minimum. */
+.shader-frame {
+  width: 100%;
+  height: 320px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+   The arrow pill. Geometry, motion and structure are ThreeUI's
+   halvorsen-arrow-pill (RectangleButtons, SHA-256 f4f3dd8422cd): 54px capsule,
+   999px radius, 36px of lead-in, an 18px gap to a 32px endcap disc, and on
+   hover a 2px lift with the chevron sliding 2px after it.
+
+   The colours are this desk's, not ThreeUI's bone-white. The source already
+   says what to do on a pale ground: "Halvorsen is a maximum-contrast pill, so
+   on paper it inverts rather than fades, the capsule takes the ink and the
+   endcap takes the paper." So the capsule is --ink, the disc is --sheet, and
+   the hover goes to true black rather than to white.
+   --------------------------------------------------------------------------- */
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  height: 54px;
+  padding: 0 11px 0 36px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 17px;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.pill__disc {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.pill svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: transform 0.3s ease;
+}
+
+.pill:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.pill:hover:not(:disabled) svg {
+  transform: translateX(2px);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+
+.pill:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* The capsule takes the ink. */
+.pill--primary {
+  background: var(--ink);
+  color: var(--sheet);
+  box-shadow: 0 14px 30px rgba(26, 26, 24, 0.22);
+}
+
+.pill--primary .pill__disc {
+  background: var(--sheet);
+  color: var(--ink);
+}
+
+.pill--primary:hover:not(:disabled) {
+  background: #000;
+}
+
+/* The quiet one keeps the shape and gives up the fill, so a secondary action
+   still reads as secondary at a glance. Scaled down to hold that hierarchy. */
+.pill--quiet {
+  height: 44px;
+  padding: 0 9px 0 22px;
+  gap: 14px;
+  border: 1px solid var(--rule-strong);
+  background: var(--sheet-inset);
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.pill--quiet .pill__disc {
+  width: 26px;
+  height: 26px;
+  background: var(--ink);
+  color: var(--sheet);
+}
+
+.pill--quiet:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--sheet);
+  color: var(--ink);
+}
+
+/* The endcap is where waiting is shown, so the chevron's slot does not sit
+   empty while a run is in flight. */
+.pill__spin {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .pill svg {
+    transition-duration: 80ms;
+  }
+
+  .pill:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .pill__spin {
+    animation-duration: 1.6s;
+  }
+}
+
+/* The shortlist tick. */
+.tickbox {
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: 2px;
+  border: 1px solid var(--rule-strong);
+  background: var(--sheet);
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.tickbox:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.tickbox:checked {
+  background-color: var(--ink);
+  border-color: var(--ink);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 11' fill='none'%3E%3Cpath d='M2 5.6L4.3 7.9L9 3.2' stroke='%23FFFFFF' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.tickbox:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.tickbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. Only what carries meaning: rank order arriving, the rule that
+   encodes a score, and a panel opening.
+   --------------------------------------------------------------------------- */
+@keyframes row-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes row-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.row-enter {
+  opacity: 0;
+  animation: row-enter 300ms var(--ease-out) forwards;
+}
+
+/* scaleX, never width. Width costs layout on every frame. The numeral does
+   not count up: comparing 88 against 84 should not wait for digits to settle. */
+@keyframes gauge-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.gauge-fill {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: gauge-fill 360ms var(--ease-out) forwards;
+}
+
+/* grid-template-rows rather than a measured height: no JS measurement to go
+   stale, and it adapts if the content reflows. */
+.working-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 200ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+
+.working-collapse[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.working-collapse > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-enter {
+    animation: row-fade 200ms var(--ease-out) forwards;
+  }
+
+  .gauge-fill {
+    transform: scaleX(1);
+    animation: none;
+  }
+
+  .working-collapse {
+    transition-duration: 120ms;
+  }
 }

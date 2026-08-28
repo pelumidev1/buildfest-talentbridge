@@ -13,6 +13,103 @@ export const MODEL = process.env.SCREENER_MODEL ?? "claude-sonnet-5";
 
 const client = new Anthropic();
 
+/**
+ * Turn an SDK failure into something a person can act on.
+ *
+ * The SDK's own `.message` is not safe to show. An exhausted credit balance and
+ * a proxy breaking TLS both surface as "Connection error.", which sends whoever
+ * is debugging straight at the network. Read the status and the whole cause
+ * chain, and say what actually went wrong.
+ */
+export function describeApiError(error: unknown): string {
+  // The useful text sits variously on the error, its `cause`, the parsed body,
+  // or a `code` several levels down. Gather all of it before matching.
+  const parts: string[] = [];
+  let status: number | undefined;
+
+  const visit = (e: unknown, depth = 0) => {
+    if (!e || depth > 5) return;
+    if (typeof e === "string") return void parts.push(e);
+    if (typeof e !== "object") return;
+    const o = e as Record<string, unknown>;
+    if (typeof o.status === "number" && status === undefined) status = o.status;
+    if (typeof o.message === "string") parts.push(o.message);
+    if (typeof o.code === "string") parts.push(o.code);
+    visit(o.error, depth + 1);
+    visit(o.cause, depth + 1);
+  };
+  visit(error);
+
+  const text = parts.join(" | ").toLowerCase();
+
+  // Account-level problems. These fail every CV in the batch identically, so the
+  // message has to point at the account rather than at the CV.
+  if (text.includes("credit balance") || text.includes("billing")) {
+    return "the Anthropic account is out of credit. Top it up in Plans & Billing, then run again.";
+  }
+  if (status === 401 || text.includes("authentication")) {
+    return "the API key was rejected. Check ANTHROPIC_API_KEY on the server.";
+  }
+  if (status === 403 || text.includes("permission")) {
+    return "the API key is not permitted to use this model.";
+  }
+  if (status === 429 || text.includes("rate limit")) {
+    return "the API rate limit was hit. Wait a moment, then screen a smaller batch.";
+  }
+  if (status === 529 || text.includes("overloaded")) {
+    return "the API is overloaded right now. Try again shortly.";
+  }
+  if (typeof status === "number" && status >= 500) {
+    return "the API returned a server error. Try again shortly.";
+  }
+
+  // Our own schema guard, already written for a person.
+  if (text.includes("did not match the schema")) {
+    return "the model returned a response that did not match the schema.";
+  }
+
+  // A broken secure channel gets its own message. It surfaces as an SSL alert one
+  // minute and a dropped HTTP/2 session the next, but it is the same class of
+  // cause: something between this process and the API inspecting HTTPS. "Check
+  // your network" would never lead anyone there.
+  if (
+    text.includes("err_ssl") ||
+    text.includes("bad record mac") ||
+    text.includes("ssl routines") ||
+    text.includes("tls alert") ||
+    text.includes("unable to verify") ||
+    text.includes("self-signed certificate") ||
+    text.includes("err_http2") ||
+    text.includes("session has been destroyed") ||
+    text.includes("eproto")
+  ) {
+    return "the secure connection to the Anthropic API keeps breaking. Antivirus or a proxy inspecting HTTPS is the usual cause.";
+  }
+
+  // A plain transport failure, reached only once the causes above are ruled out.
+  if (
+    text.includes("connection error") ||
+    text.includes("fetch failed") ||
+    text.includes("timeout") ||
+    text.includes("econnrefused") ||
+    text.includes("enotfound")
+  ) {
+    return "could not reach the Anthropic API. Check the server's network access.";
+  }
+
+  const first = parts.find((p) => p.trim().length > 0);
+  return first ? first.toLowerCase() : "unknown error.";
+}
+
+/** Retrying a rejected key or an empty balance only doubles the failures. */
+function isRetryable(error: unknown): boolean {
+  const o = error as { status?: unknown } | null;
+  const status = o && typeof o.status === "number" ? o.status : undefined;
+  // No status means a schema or parse failure, which a second pass often fixes.
+  if (status === undefined) return true;
+  return status >= 500 || status === 429;
+}
+
 // The model rates and cites. It never returns a total, and it never sees a
 // name. Both of those are enforced outside this schema (computeScore does the
 // arithmetic; redact() strips the identity) but the schema is what stops the
@@ -110,9 +207,47 @@ export async function screenCandidate(
   // lands. Retrying more than once turns a systematic failure into a bill.
   try {
     return await attempt(jobTitle, jobDescription, cvText, alias);
-  } catch {
+  } catch (error) {
+    // Only retry what a second pass could fix. A 400 for an empty balance or a
+    // 401 for a bad key fails identically every time, and retrying it across a
+    // batch of twenty just doubles the noise.
+    if (!isRetryable(error)) throw error;
+    await pauseBeforeRetry(error);
     return await attempt(jobTitle, jobDescription, cvText, alias);
   }
+}
+
+/**
+ * Wait before a retry that needs the wait.
+ *
+ * A schema failure is worth retrying immediately: nothing on the other end has
+ * to recover. A 429 or a 5xx does need to, and retrying it in the same
+ * millisecond just spends the second attempt to be told the same thing. Five
+ * CVs are in flight at once here, so a rate limit arrives for all of them
+ * together and they would all bounce together too.
+ */
+async function pauseBeforeRetry(error: unknown): Promise<void> {
+  const o = error as { status?: unknown; headers?: unknown } | null;
+  const status = o && typeof o.status === "number" ? o.status : undefined;
+  if (status === undefined) return;
+
+  // Honour the API's own instruction when it sends one.
+  const headers = o?.headers;
+  const retryAfter =
+    headers instanceof Headers
+      ? headers.get("retry-after")
+      : typeof headers === "object" && headers !== null
+        ? (headers as Record<string, string>)["retry-after"]
+        : undefined;
+
+  const seconds = retryAfter ? Number(retryAfter) : NaN;
+  const waitMs = Number.isFinite(seconds) && seconds > 0
+    ? Math.min(seconds * 1000, 10_000)
+    : status === 429
+      ? 2_000
+      : 750;
+
+  await new Promise((resolve) => setTimeout(resolve, waitMs));
 }
 
 async function attempt(
