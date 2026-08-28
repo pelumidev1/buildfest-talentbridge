@@ -3,6 +3,8 @@
 import * as React from "react";
 import type { ScreenResult } from "@/lib/types";
 import { CandidateCard } from "@/components/CandidateCard";
+import { Hero } from "@/components/Hero";
+import { FieldBackdrop } from "@/components/FieldBackdrop";
 import {
   BandLegend,
   Button,
@@ -10,7 +12,6 @@ import {
   RubricTable,
   Sheet,
   SheetTitle,
-  Spinner,
   WeightStrip,
 } from "@/components/ui";
 
@@ -150,19 +151,14 @@ export default function Page() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[960px] flex-1 flex-col gap-7 px-5 py-16 sm:px-8">
-      <header className="flex flex-col gap-2.5 sm:pl-11">
-        <h1 className="text-[34px] leading-10 font-normal tracking-[-0.02em] text-[var(--ink)]">
-          talentbridge
-        </h1>
-        <p className="max-w-[680px] text-[16px] leading-6 text-[var(--ink-2)]">
-          a first pass over a stack of CVs, scored against a rubric fixed before
-          anyone is seen
-        </p>
-      </header>
+    <main className="mx-auto flex w-full max-w-[960px] flex-1 flex-col gap-7 px-5 pt-10 pb-16 sm:px-8">
+      <Hero />
 
       {/* The rubric, in the open. A score nobody can recompute is not a score. */}
-      <Sheet n="1">
+      <Sheet
+        n="1"
+        backdrop={<FieldBackdrop field="topo" strength={0.45} speed={0.25} density={1.05} />}
+      >
         <SheetTitle
           title="the rubric every candidate is scored against"
           note="fixed before any CV is opened, and printed here so any score can be recomputed by hand"
@@ -172,7 +168,14 @@ export default function Page() {
         <BandLegend />
       </Sheet>
 
-      <Sheet n="2">
+      <Sheet
+        n="2"
+        backdrop={
+          busy ? (
+            <FieldBackdrop field="flow" strength={0.5} speed={0.9} />
+          ) : null
+        }
+      >
         <SheetTitle
           title="the role and the stack of CVs"
           note="anything left out of the description cannot be counted as a gap"
@@ -181,8 +184,8 @@ export default function Page() {
               variant="quiet"
               onClick={loadSample}
               disabled={loadingSample || busy}
+              busy={loadingSample}
             >
-              {loadingSample && <Spinner />}
               load the sample role and 10 CVs
             </Button>
           }
@@ -260,8 +263,7 @@ export default function Page() {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 border-t border-[var(--rule)] pt-[18px]">
-            <Button onClick={run} disabled={!canRun}>
-              {busy && <Spinner />}
+            <Button onClick={run} disabled={!canRun} busy={busy}>
               {busy
                 ? `screening ${files.length} CVs`
                 : `screen ${files.length || ""} CVs`.trim()}

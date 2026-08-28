@@ -26,13 +26,17 @@ export function bandLabel(band: string): string {
 /** A sheet on the desk, with its number in the margin. */
 export function Sheet({
   n,
+  backdrop,
   children,
 }: {
   n?: string;
+  /** An optional ThreeUI field printed under the sheet. Decoration only. */
+  backdrop?: React.ReactNode;
   children: React.ReactNode;
 }) {
   return (
-    <section className="sheet flex w-full items-start p-8">
+    <section className="sheet relative isolate flex w-full items-start overflow-hidden p-8">
+      {backdrop}
       {n !== undefined && (
         <div className="w-11 shrink-0">
           <span className="flex h-[18px] w-[18px] items-center justify-center rounded-[2px] border border-[var(--rule-strong)] font-mono text-[10px] text-[var(--ink-3)]">
@@ -201,32 +205,42 @@ export function Score({
   );
 }
 
+/**
+ * The arrow pill. Structure and motion are ThreeUI's halvorsen-arrow-pill,
+ * recoloured to this desk in globals.css. The label sits in its own span and
+ * the endcap disc carries the chevron, or the spinner while work is in flight.
+ */
 export function Button({
   children,
   variant = "primary",
+  busy = false,
   className = "",
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "quiet";
+  /** Puts the spinner in the endcap instead of the chevron. */
+  busy?: boolean;
 }) {
-  const base =
-    "inline-flex items-center justify-center gap-2.5 rounded-[3px] text-[14px] transition-colors disabled:cursor-not-allowed disabled:opacity-40";
-  const styles =
-    variant === "primary"
-      ? "bg-[var(--ink)] px-[22px] py-3 font-medium text-white hover:bg-[#33322e]"
-      : "border border-[var(--rule-strong)] bg-[var(--sheet-inset)] px-3.5 py-2 text-[13px] text-[var(--ink-2)] hover:bg-white";
   return (
-    <button className={`${base} ${styles} ${className}`} {...rest}>
-      {children}
+    <button
+      className={`pill pill--${variant} ${className}`.trim()}
+      aria-busy={busy || undefined}
+      {...rest}
+    >
+      <span>{children}</span>
+      <span className="pill__disc">
+        {busy ? (
+          <Spinner />
+        ) : (
+          <svg viewBox="0 0 12 12" aria-hidden="true">
+            <path d="M3 1.5 8 6 3 10.5" />
+          </svg>
+        )}
+      </span>
     </button>
   );
 }
 
 export function Spinner() {
-  return (
-    <span
-      className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
-      aria-hidden
-    />
-  );
+  return <span className="pill__spin" aria-hidden />;
 }

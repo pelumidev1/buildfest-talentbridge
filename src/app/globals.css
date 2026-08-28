@@ -78,6 +78,163 @@ textarea {
   background: color-mix(in srgb, var(--strong) 18%, transparent);
 }
 
+/* The frame ThreeUI's own preview page puts around a component. It is not part
+   of the registered source bundle, which defines no .shader-frame rule, so the
+   stage inside it would otherwise resolve height: 100% against nothing and fall
+   back to its own 240px minimum. */
+.shader-frame {
+  width: 100%;
+  height: 320px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+   The arrow pill. Geometry, motion and structure are ThreeUI's
+   halvorsen-arrow-pill (RectangleButtons, SHA-256 f4f3dd8422cd): 54px capsule,
+   999px radius, 36px of lead-in, an 18px gap to a 32px endcap disc, and on
+   hover a 2px lift with the chevron sliding 2px after it.
+
+   The colours are this desk's, not ThreeUI's bone-white. The source already
+   says what to do on a pale ground: "Halvorsen is a maximum-contrast pill, so
+   on paper it inverts rather than fades, the capsule takes the ink and the
+   endcap takes the paper." So the capsule is --ink, the disc is --sheet, and
+   the hover goes to true black rather than to white.
+   --------------------------------------------------------------------------- */
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  height: 54px;
+  padding: 0 11px 0 36px;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 17px;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.pill__disc {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.pill svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transition: transform 0.3s ease;
+}
+
+.pill:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.pill:hover:not(:disabled) svg {
+  transform: translateX(2px);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 5px;
+}
+
+.pill:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* The capsule takes the ink. */
+.pill--primary {
+  background: var(--ink);
+  color: var(--sheet);
+  box-shadow: 0 14px 30px rgba(26, 26, 24, 0.22);
+}
+
+.pill--primary .pill__disc {
+  background: var(--sheet);
+  color: var(--ink);
+}
+
+.pill--primary:hover:not(:disabled) {
+  background: #000;
+}
+
+/* The quiet one keeps the shape and gives up the fill, so a secondary action
+   still reads as secondary at a glance. Scaled down to hold that hierarchy. */
+.pill--quiet {
+  height: 44px;
+  padding: 0 9px 0 22px;
+  gap: 14px;
+  border: 1px solid var(--rule-strong);
+  background: var(--sheet-inset);
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.pill--quiet .pill__disc {
+  width: 26px;
+  height: 26px;
+  background: var(--ink);
+  color: var(--sheet);
+}
+
+.pill--quiet:hover:not(:disabled) {
+  border-color: var(--ink);
+  background: var(--sheet);
+  color: var(--ink);
+}
+
+/* The endcap is where waiting is shown, so the chevron's slot does not sit
+   empty while a run is in flight. */
+.pill__spin {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill,
+  .pill svg {
+    transition-duration: 80ms;
+  }
+
+  .pill:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .pill__spin {
+    animation-duration: 1.6s;
+  }
+}
+
 /* The shortlist tick. */
 .tickbox {
   appearance: none;
