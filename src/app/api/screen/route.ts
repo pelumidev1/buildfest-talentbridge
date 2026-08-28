@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { extractCvText } from "@/lib/extract";
 import { redact, aliasFor, nameFromFilename } from "@/lib/redact";
 import { screenCandidate, describeApiError, MODEL } from "@/lib/screen";
-import { isUnlocked } from "@/lib/gate";
+import { isUnlocked, gateIsMisconfigured } from "@/lib/gate";
 import { rateLimited, RATE_LIMIT_MESSAGE } from "@/lib/rate-limit";
 import type { Candidate, ScreenResult } from "@/lib/types";
 
@@ -34,6 +34,12 @@ async function pool<T, R>(items: T[], limit: number, fn: (item: T, i: number) =>
 }
 
 export async function POST(request: Request) {
+  if (gateIsMisconfigured()) {
+    return NextResponse.json(
+      { error: "SCREENER_ACCESS_CODE is not set on the server, so the gate cannot open." },
+      { status: 503 }
+    );
+  }
   if (!(await isUnlocked())) {
     return NextResponse.json({ error: "Enter the access code to run a screen." }, { status: 401 });
   }

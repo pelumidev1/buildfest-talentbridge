@@ -212,8 +212,42 @@ export async function screenCandidate(
     // 401 for a bad key fails identically every time, and retrying it across a
     // batch of twenty just doubles the noise.
     if (!isRetryable(error)) throw error;
+    await pauseBeforeRetry(error);
     return await attempt(jobTitle, jobDescription, cvText, alias);
   }
+}
+
+/**
+ * Wait before a retry that needs the wait.
+ *
+ * A schema failure is worth retrying immediately: nothing on the other end has
+ * to recover. A 429 or a 5xx does need to, and retrying it in the same
+ * millisecond just spends the second attempt to be told the same thing. Five
+ * CVs are in flight at once here, so a rate limit arrives for all of them
+ * together and they would all bounce together too.
+ */
+async function pauseBeforeRetry(error: unknown): Promise<void> {
+  const o = error as { status?: unknown; headers?: unknown } | null;
+  const status = o && typeof o.status === "number" ? o.status : undefined;
+  if (status === undefined) return;
+
+  // Honour the API's own instruction when it sends one.
+  const headers = o?.headers;
+  const retryAfter =
+    headers instanceof Headers
+      ? headers.get("retry-after")
+      : typeof headers === "object" && headers !== null
+        ? (headers as Record<string, string>)["retry-after"]
+        : undefined;
+
+  const seconds = retryAfter ? Number(retryAfter) : NaN;
+  const waitMs = Number.isFinite(seconds) && seconds > 0
+    ? Math.min(seconds * 1000, 10_000)
+    : status === 429
+      ? 2_000
+      : 750;
+
+  await new Promise((resolve) => setTimeout(resolve, waitMs));
 }
 
 async function attempt(

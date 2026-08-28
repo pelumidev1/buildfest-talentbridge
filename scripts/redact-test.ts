@@ -5,7 +5,9 @@ ada.obieze@example.com | +234 803 555 0142 | Lagos, Nigeria
 Date of Birth: 12 March 1996
 Gender: Female
 Marital Status: Single
-linkedin.com/in/adaobieze
+https://www.linkedin.com/in/adaobieze
+https://github.com/adaobieze
+Portfolio: https://ada.example.com/work
 
 EXPERIENCE
 Senior Data Analyst, PayGrid (2023-2026)
@@ -28,6 +30,12 @@ const checks: [string, boolean][] = [
   ["dob line gone", !text.includes("12 March 1996")],
   ["gender line gone", !text.includes("Female")],
   ["linkedin gone", !text.includes("adaobieze")],
+  // A CV writes its profile as a full URL. The profile pass has to consume the
+  // scheme too, or the URL pass that follows chews the leftover stub and the
+  // model reads "[link removed] removed]".
+  ["no double-replaced link markers", !text.includes("removed] removed]")],
+  ["profile links marked as profiles", (text.match(/\[profile removed\]/g) || []).length === 2],
+  ["plain portfolio link still marked as a link", text.includes("[link removed]")],
   ["impact numbers survive", text.includes("9 days to 2") && text.includes("40 stores")],
   ["filename parsing", nameFromFilename("ada-obieze-CV-final.pdf") === "Ada Obieze"],
   ["alias sequence", aliasFor(0) === "Candidate A" && aliasFor(25) === "Candidate Z" && aliasFor(26) === "Candidate AA"],
