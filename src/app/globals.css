@@ -144,7 +144,7 @@ textarea {
   animation: row-enter 300ms var(--ease-out) forwards;
 }
 
-/* scaleX, never width — width costs layout on every frame. The numeral does
+/* scaleX, never width. Width costs layout on every frame. The numeral does
    not count up: comparing 88 against 84 should not wait for digits to settle. */
 @keyframes gauge-fill {
   from {

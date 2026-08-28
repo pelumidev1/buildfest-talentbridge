@@ -78,7 +78,7 @@ export function FieldLabel({ children }: { children: React.ReactNode }) {
 }
 
 /**
- * The rubric as one proportional strip. Neutral greys, not the band colours —
+ * The rubric as one proportional strip. Neutral greys, not the band colours:
  * colour means "which band", and a weight is not a band.
  */
 const WEIGHT_SHADES: Record<number, string> = {

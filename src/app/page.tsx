@@ -97,7 +97,7 @@ export default function Page() {
         return;
       }
       if (!res.ok) {
-        setError(data.error ?? "Something went wrong.");
+        setError(data.error ?? "The server rejected the run without saying why.");
         return;
       }
       setResult(data as ScreenResult);
@@ -234,7 +234,7 @@ export default function Page() {
             >
               {files.length === 0 ? (
                 <span className="text-[13px] text-[var(--ink-2)]">
-                  choose CV files — PDF or plain text, up to 20 at a time
+                  choose CV files. PDF or plain text, up to 20 at a time
                 </span>
               ) : (
                 <>
@@ -269,7 +269,7 @@ export default function Page() {
             <span className="flex-1 basis-0 text-[13px] leading-5 text-[var(--ink-2)]">
               {busy
                 ? "reading each CV, stripping identity, then scoring against the rubric."
-                : "each CV is read, stripped of identity, then scored against the rubric above. nothing is stored."}
+                : "the assistant reads each CV, strips the identity, then scores what is left against the rubric above. it keeps nothing."}
             </span>
           </div>
 
@@ -336,8 +336,8 @@ export default function Page() {
                     {shortlisted.length} shortlisted
                   </span>
                   <span className="text-[12px] leading-[17px] text-[var(--ink-2)]">
-                    {shortlisted.map((c) => c.displayName).join(", ")} — the
-                    assistant shortlists nobody, this is your tick box
+                    {shortlisted.map((c) => c.displayName).join(", ")}. The
+                    assistant shortlists nobody; the tick box is yours.
                   </span>
                 </>
               )}
