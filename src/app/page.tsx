@@ -15,6 +15,11 @@ import {
   WeightStrip,
 } from "@/components/ui";
 
+// Short enough that a real posting always clears it, long enough that two lines
+// of notes do not. Anything left out of the description cannot be scored, so a
+// thin description produces confident nonsense rather than a thin result.
+const MIN_JD = 80;
+
 const SAMPLE_CVS = [
   "ada-obieze-CV.pdf",
   "bisi-lawal-CV.pdf",
@@ -109,11 +114,22 @@ export default function Page() {
     }
   }
 
-  const canRun =
-    jobTitle.trim() &&
-    jobDescription.trim().length >= 80 &&
-    files.length > 0 &&
-    !busy;
+  // The screen scores against the description, so a description too thin to
+  // score against is a blocked run, not a bad one. Whatever is missing is named
+  // next to the button, because that is where someone looks when nothing
+  // happens.
+  const jdLength = jobDescription.trim().length;
+  const blocker = !jobTitle.trim()
+    ? "add the job title first."
+    : jdLength < MIN_JD
+      ? `the job description needs ${MIN_JD - jdLength} more characters before this can run.`
+      : files.length === 0
+        ? "choose at least one CV."
+        : null;
+
+  const canRun = !blocker && !busy;
+
+  const cvWord = files.length === 1 ? "CV" : "CVs";
 
   const screened = result?.candidates.filter((c) => !c.error) ?? [];
   const shortlisted = screened.filter((c) => shortlist.has(c.id));
@@ -206,10 +222,9 @@ export default function Page() {
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <FieldLabel>job description and requirements</FieldLabel>
               <span className="nums font-mono text-[11px] text-[var(--ink-3)]">
-                {jobDescription.length.toLocaleString()} characters
-                {jobDescription.length > 0 &&
-                  jobDescription.length < 80 &&
-                  " (too short)"}
+                {jdLength < MIN_JD
+                  ? `${MIN_JD - jdLength} more characters needed`
+                  : `${jdLength.toLocaleString()} characters`}
               </span>
             </div>
             <textarea
@@ -246,7 +261,7 @@ export default function Page() {
                   </span>
                   <span className="flex flex-1 basis-0 flex-col gap-0.5 overflow-hidden">
                     <span className="text-[14px] font-medium text-[var(--ink)]">
-                      {files.length} CVs ready
+                      {files.length} {cvWord} ready
                     </span>
                     <span className="truncate font-mono text-[11px] leading-4 text-[var(--ink-3)]">
                       {files
@@ -265,13 +280,16 @@ export default function Page() {
           <div className="flex flex-wrap items-center gap-4 border-t border-[var(--rule)] pt-[18px]">
             <Button onClick={run} disabled={!canRun} busy={busy}>
               {busy
-                ? `screening ${files.length} CVs`
-                : `screen ${files.length || ""} CVs`.trim()}
+                ? `screening ${files.length} ${cvWord}`
+                : files.length
+                  ? `screen ${files.length} ${cvWord}`
+                  : "screen CVs"}
             </Button>
             <span className="flex-1 basis-0 text-[13px] leading-5 text-[var(--ink-2)]">
               {busy
                 ? "reading each CV, stripping identity, then scoring against the rubric."
-                : "the assistant reads each CV, strips the identity, then scores what is left against the rubric above. it keeps nothing."}
+                : (blocker ??
+                  "the assistant reads each CV, strips the identity, then scores what is left against the rubric above. it keeps nothing.")}
             </span>
           </div>
 
